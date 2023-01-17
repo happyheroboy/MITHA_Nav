@@ -7,4 +7,5 @@ Four algorithms are in the uploaded Matlab file, including marker detection, ins
  2. instrument calibration. The "im_Triangulate.m" is the main function.
  3. instrument tracking. The "tracking.m" is the main function
  4. point-based registration. The "registration.m" is the main function.
+ 
 All of the above functions are configured. You can run them.
