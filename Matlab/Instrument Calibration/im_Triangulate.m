@@ -22,48 +22,48 @@ for b=1:imageNum
     
     IL{b}=ml;
     IR{b}=mr;
-    %%
-    %%ÌØÕ÷µã
+    
+    %%read marker
     expectN = 2*(size(sta,1)+1)*(size(sta,2)+1);
     [ptListl,edgel] = read_marker(ml,sta,5,expectN,3);    
     [ptListr,edger] = read_marker(mr,sta,5,expectN,3);
     
     ptListl(:,3)=ptListl(:,3);
     ptListr(:,3)=ptListr(:,3);
-    %µãµÄÌØÕ÷ÁĞ±í
+    %ç‚¹çš„ç‰¹å¾åˆ—è¡¨
     PTLISTL{b}=ptListl;
     PTLISTR{b}=ptListr;
     %% 
-% ÏÔÊ¾ display
+    % æ˜¾ç¤º display
     figure;
     imshow(ml);
     hold on;
-    % »æÖÆ±ß draw edges
+    % ç»˜åˆ¶è¾¹ draw edges
     Y = ptListl(:,1);
     X = ptListl(:,2);
     plot(X(edgel'),Y(edgel'),'LineWidth',3,'Color','r');
-    % »æÖÆµã draw dots
+    % ç»˜åˆ¶ç‚¹ draw dots
     scatter(ptListl(:,2),ptListl(:,1),100,'g','filled','o','LineWidth',4);
-    % »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+    % ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
     pt_uID = ptListl(isnan(ptListl(:,3)),:);
     scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-    % »æÖÆID draw IDs
+    % ç»˜åˆ¶ID draw IDs
     pt_ID = ptListl(~isnan(ptListl(:,3)),:);
     text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',30,'Color','g');
 %     
     figure;
     imshow(mr);
     hold on;
-    % »æÖÆ±ß draw edges
+    % ç»˜åˆ¶è¾¹ draw edges
     Y = ptListr(:,1);
     X = ptListr(:,2);
     plot(X(edger'),Y(edger'),'LineWidth',3,'Color','r');
-    % »æÖÆµã draw dots
+    % ç»˜åˆ¶ç‚¹ draw dots
     scatter(ptListr(:,2),ptListr(:,1),100,'g','filled','o','LineWidth',4);
-    % »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+    % ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
     pt_uID = ptListr(isnan(ptListr(:,3)),:);
     scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-    % »æÖÆID draw IDs
+    % ç»˜åˆ¶ID draw IDs
     pt_ID = ptListr(~isnan(ptListr(:,3)),:);
     text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',30,'Color','g');
 end
@@ -86,9 +86,7 @@ end
 PTLISTLL=cell(imageNum,1);
 PTLISTRR=cell(imageNum,1);
 
-%%
-%%ID ºÍ×ø±ê
-%%%%%Ê£ÏÂµÄ¾ÍÊÇ¼ÆËãID ºÍIDÖ®¼äµÄÆ¥Åä¡¢ÇóÈıÎ¬×ø±ê
+%%Trangulation
 Error=[];
 point3D=cell(1,imageNum);
 for e=1:imageNum
@@ -96,11 +94,11 @@ for e=1:imageNum
     pointR=PTLISTR{e};
     
     [c,ia,ib]=intersect(pointL(:,3),pointR(:,3));
-    %%¼ÆËãµÚÒ»¶ÔÆ¥ÅäµãµÄÈıÎ¬Öµ
+
     [p3d,error]=triangulate(pointL(ia,1:2),pointR(ib,1:2),stereoParams);
     p3did=[p3d pointL(ia,3)];
     point3D{e}=p3did;
-    %ÖØÍ¶Ó°Îó²î
+    %é‡æŠ•å½±è¯¯å·® repro error
     Error=[Error,mean(error)];
 end
 
@@ -118,7 +116,7 @@ for j=2:imageNum
     cur3D=cur3Did(:,1:3);
 
     [c,ia,ib]=intersect(pre3Did(:,4),cur3Did(:,4));
-    [r_mat,t_mat]  = CalculateRTMatrix(pre3Did(ia,1:3),cur3Did(ib,1:3));%%ÄÚÈİÓĞ¿ÉÄÜĞ´´íÁË
+    [r_mat,t_mat]  = CalculateRTMatrix(pre3Did(ia,1:3),cur3Did(ib,1:3));
 
     Orientation{j-1} = r_mat;
     Location{j-1} = t_mat;   
@@ -140,7 +138,7 @@ for i=imageNum-1:-1:1
    vSet = updateView(vSet, i, 'Orientation', orientation, ...
         'Location', location);
 end
-%% 
+%% multi-view reconstruction
 last_points3Did={};
 for i=imageNum-1:-1:1
     pid=point3D{i};
@@ -156,6 +154,7 @@ end
 
 last_points3Did{imageNum}=point3D{1,imageNum};
 
+%obtain instrument calibration model
 XYZpoints=point3D{1,imageNum};
 for i=imageNum-1:-1:1
     qp=last_points3Did{i};
