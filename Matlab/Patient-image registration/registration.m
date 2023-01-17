@@ -122,7 +122,7 @@ virtualBoneSpurs = [438.20,152.15,115.78,1;429.10,156.60,118.01,2;434.00,170.70,
 
 %%
 %projection to CT image
-img=imread('.\reg\Wu Xiu Yu_Coronal+149.92-000.bmp');
+img=imread('.\reg\ct_Img.bmp');
 fileNameL='.\reg\0.bmp';
 fileNameR='.\reg\1.bmp';
 k=1;
