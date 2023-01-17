@@ -8,4 +8,4 @@ Four algorithms are in the uploaded Matlab file, including marker detection, ins
  3. instrument tracking. The "tracking.m" is the main function
  4. point-based registration. The "registration.m" is the main function.
  
-All of the above functions are configured. You can download interested algorithm and run it.
+All of the above functions are configured. You can download interested algorithm and run it directly.
