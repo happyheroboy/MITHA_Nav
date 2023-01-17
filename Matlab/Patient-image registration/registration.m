@@ -19,50 +19,50 @@ for b=1:imageNum
 %     IL{b}=ml;
 %     IR{b}=mr;
     %% 
-    %%ÌØÕ÷µã
+    %%ç‰¹å¾ç‚¹ read maker
     expectN = 2*(size(sta,1)+1)*(size(sta,2)+1);
     [ptListl,edgel] = read_marker(ml,sta,5,expectN,3);    
     [ptListr,edger] = read_marker(mr,sta,5,expectN,3);
     
-    %µãµÄÌØÕ÷ÁĞ±í
+    %ç‚¹çš„ç‰¹å¾åˆ—è¡¨ feature list
     PTLISTL{b}=ptListl;
     PTLISTR{b}=ptListr;
     %% 
-% ÏÔÊ¾
+% æ˜¾ç¤º  display
 %     figure;
 %     imshow(ml);
 %     hold on;
-%     % »æÖÆ±ß draw edges
+%     % ç»˜åˆ¶è¾¹ draw edges
 %     Y = ptListl(:,1);
 %     X = ptListl(:,2);
 %     plot(X(edgel'),Y(edgel'),'LineWidth',3,'Color','g');
-%     % »æÖÆµã draw dots
+%     % ç»˜åˆ¶ç‚¹ draw dots
 %     scatter(ptListl(:,2),ptListl(:,1),100,'g','filled','o','LineWidth',1);
-%     % »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+%     % ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
 %     pt_uID = ptListl(isnan(ptListl(:,3)),:);
 %     scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-%     % »æÖÆID draw IDs
+%     % ç»˜åˆ¶ID draw IDs
 %     pt_ID = ptListl(~isnan(ptListl(:,3)),:);
 %     text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',15,'Color','y');
     
 %     figure;
 %     imshow(mr);
 %     hold on;
-%     % »æÖÆ±ß draw edges
+%     % ç»˜åˆ¶è¾¹ draw edges
 %     Y = ptListr(:,1);
 %     X = ptListr(:,2);
 %     plot(X(edger'),Y(edger'),'LineWidth',3,'Color','g');
-%     % »æÖÆµã draw dots
+%     % ç»˜åˆ¶ç‚¹ draw dots
 %     scatter(ptListr(:,2),ptListr(:,1),100,'g','filled','o','LineWidth',1);
-%     % »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+%     % ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
 %     pt_uID = ptListr(isnan(ptListr(:,3)),:);
 %     scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-%     % »æÖÆID draw IDs
+%     % ç»˜åˆ¶ID draw IDs
 %     pt_ID = ptListr(~isnan(ptListr(:,3)),:);
 %     text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',15,'Color','y');
 end
     
-%%ÌŞ³ıNaN
+%%å‰”é™¤NaN  remove NaN
 for c=1:imageNum
     A=PTLISTL{c};
     [cx1,cy1]=find(isnan(A));
@@ -78,8 +78,7 @@ for c=1:imageNum
 end
 
 %%
-%%ID ºÍ×ø±ê
-%%%%%Ê£ÏÂµÄ¾ÍÊÇ¼ÆËãID ºÍIDÖ®¼äµÄÆ¥Åä¡¢ÇóÈıÎ¬×ø±ê  computer 3D position 
+%% computer 3D position 
 Error=cell(imageNum,1);
 point3D=cell(1,imageNum);
 for e=1:imageNum
@@ -87,11 +86,10 @@ for e=1:imageNum
     pointR=PTLISTR{e};  
     [c,ia,ib]=intersect(pointL(:,3),pointR(:,3));
     
-    %%¼ÆËãµÚÒ»¶ÔÆ¥ÅäµãµÄÈıÎ¬Öµ
     [p3d,error]=triangulate(pointL(ia,1:2),pointR(ib,1:2),stereoParams);
     p3did=[p3d pointL(ia,3)];
     point3D{e}=p3did;
-    %ÖØÍ¶Ó°Îó²î repro error
+    %é‡æŠ•å½±è¯¯å·® repro error
     Error{e}=mean(error);
 end
 
@@ -144,7 +142,7 @@ ml=im2double(imread(fileNameL));
 mr=im2double(imread(fileNameR));
 
   %%
-  %»û±äĞ£Õı
+  %ç•¸å˜æ ¡æ­£
 ml = undistortImage(ml,stereoParams.CameraParameters1);
 mr = undistortImage(mr,stereoParams.CameraParameters2);
 
@@ -152,41 +150,41 @@ expectN = 2*(size(sta,1)+1)*(size(sta,2)+1);
 [ptListl,edgel] = read_marker(ml,sta,5,expectN,3);
 [ptListr,edger] = read_marker(mr,sta,5,expectN,3);
 
-%µãµÄÌØÕ÷ÁĞ±í
+%ç‚¹çš„ç‰¹å¾åˆ—è¡¨
 PTLISTL{k}=ptListl;
 PTLISTR{k}=ptListr;
 
 %%
-% ÏÔÊ¾
+% æ˜¾ç¤º
 % figure;
 % imshow(ml);
 % hold on;
-% % »æÖÆ±ß draw edges
+% % ç»˜åˆ¶è¾¹ draw edges
 % Y = ptListl(:,1);
 % X = ptListl(:,2);
 % plot(X(edgel'),Y(edgel'),'LineWidth',3,'Color','g');
-% % »æÖÆµã draw dots
+% % ç»˜åˆ¶ç‚¹ draw dots
 % scatter(ptListl(:,2),ptListl(:,1),100,'g','filled','o','LineWidth',1);
-% % »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+% % ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
 % pt_uID = ptListl(isnan(ptListl(:,3)),:);
 % scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-% % »æÖÆID draw IDs
+% % ç»˜åˆ¶ID draw IDs
 % pt_ID = ptListl(~isnan(ptListl(:,3)),:);
 % text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',15,'Color','y');
 %     
 %     figure;
 %     imshow(mr);
 %     hold on;
-%     % »æÖÆ±ß draw edges
+%     % ç»˜åˆ¶è¾¹ draw edges
 %     Y = ptListr(:,1);
 %     X = ptListr(:,2);
 %     plot(X(edger'),Y(edger'),'LineWidth',3,'Color','g');
-%     % »æÖÆµã draw dots
+%     % ç»˜åˆ¶ç‚¹ draw dots
 %     scatter(ptListr(:,2),ptListr(:,1),100,'g','filled','o','LineWidth',1);
-%     % »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+%     % ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
 %     pt_uID = ptListr(isnan(ptListr(:,3)),:);
 %     scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-%     % »æÖÆID draw IDs
+%     % ç»˜åˆ¶ID draw IDs
 %     pt_ID = ptListr(~isnan(ptListr(:,3)),:);
 %     text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',15,'Color','y');
 %%
@@ -205,11 +203,11 @@ PTLISTR{k}=BB;
 pointL=PTLISTL{k};
 pointR=PTLISTR{k};
 [c,ia,ib]=intersect(pointL(:,3),pointR(:,3));
-%%¼ÆËãµÚÒ»¶ÔÆ¥ÅäµãµÄÈıÎ¬Öµ
+%%è®¡ç®—ç¬¬ä¸€å¯¹åŒ¹é…ç‚¹çš„ä¸‰ç»´å€¼
 [p3d,error]=triangulate(pointL(ia,1:2),pointR(ib,1:2),stereoParams);
 p3did=[p3d pointL(ia,3)];
 point3D{k}=p3did;
-%ÖØÍ¶Ó°Îó²î
+%é‡æŠ•å½±è¯¯å·®
 Error=[Error,mean(error)];
 %%
 [matchpoint,ia1,ib1]=intersect(cali(:,4),p3did(:,4));
