@@ -18,51 +18,52 @@ mr = undistortImage(mr,stereoParams.CameraParameters2);
 IL=ml;
 IR=mr;
 %%
-%%ÌØÕ÷µã
+%%ç‰¹å¾ç‚¹ read marker
 expectN = 2*(size(sta,1)+1)*(size(sta,2)+1);
 [ptListl,edgel] = read_marker(ml,sta,5,expectN,3);
 [ptListr,edger] = read_marker(mr,sta,5,expectN,3);
 
 ptListl(:,3)=ptListl(:,3);
 ptListr(:,3)=ptListr(:,3);
-%µãµÄÌØÕ÷ÁĞ±í
+
+%ç‚¹çš„ç‰¹å¾åˆ—è¡¨ feature list
 PTLISTL=ptListl;
 PTLISTR=ptListr;
-%%
-% ÏÔÊ¾ display
+
+%%æ˜¾ç¤º display
 figure;
 imshow(ml);
 hold on;
-% »æÖÆ±ß draw edges
+% ç»˜åˆ¶è¾¹ draw edges
 Y = ptListl(:,1);
 X = ptListl(:,2);
 plot(X(edgel'),Y(edgel'),'LineWidth',3,'Color','r');
-% »æÖÆµã draw dots
+% ç»˜åˆ¶ç‚¹ draw dots
 scatter(ptListl(:,2),ptListl(:,1),100,'g','filled','o','LineWidth',4);
-% »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+% ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
 pt_uID = ptListl(isnan(ptListl(:,3)),:);
 scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-% »æÖÆID draw IDs
+% ç»˜åˆ¶ID draw IDs
 pt_ID = ptListl(~isnan(ptListl(:,3)),:);
 text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',30,'Color','g');
 %
 figure;
 imshow(mr);
 hold on;
-% »æÖÆ±ß draw edges
+% ç»˜åˆ¶è¾¹ draw edges
 Y = ptListr(:,1);
 X = ptListr(:,2);
 plot(X(edger'),Y(edger'),'LineWidth',3,'Color','r');
-% »æÖÆµã draw dots
+% ç»˜åˆ¶ç‚¹ draw dots
 scatter(ptListr(:,2),ptListr(:,1),100,'g','filled','o','LineWidth',4);
-% »æÖÆ²»È·¶¨IDµÄµã draw unsure IDs
+% ç»˜åˆ¶ä¸ç¡®å®šIDçš„ç‚¹ draw unsure IDs
 pt_uID = ptListr(isnan(ptListr(:,3)),:);
 scatter(pt_uID(:,2),pt_uID(:,1),100,'r','x','LineWidth',3);
-% »æÖÆID draw IDs
+% ç»˜åˆ¶ID draw IDs
 pt_ID = ptListr(~isnan(ptListr(:,3)),:);
 text(pt_ID(:,2),pt_ID(:,1),num2str(pt_ID(:,3)),'FontSize',30,'Color','g');
-%%
-%%ÌŞ³ıNaN  remove NaN
+
+%%å‰”é™¤NaN  remove NaN
 % for c=1:imageNum
 A=PTLISTL;
 [cx1,cy1]=find(isnan(A));
@@ -81,11 +82,11 @@ pointL=PTLISTL;
 pointR=PTLISTR;
 [c,ia1,ib1]=intersect(pointL(:,3),pointR(:,3));
 
-%%¼ÆËãµÚÒ»¶ÔÆ¥ÅäµãµÄÈıÎ¬Öµ
+%%ä¸‰è§’æµ‹é‡ triangulation
 [p3d,error]=triangulate(pointL(ia1,1:2),pointR(ib1,1:2),stereoParams);
 p3did=[p3d pointL(ia1,3)];
 point3D=p3did;
-%ÖØÍ¶Ó°Îó²î
+%é‡æŠ•å½±è¯¯å·® repro erroe
 Error=mean(error);
 
 %%
